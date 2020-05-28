@@ -1,14 +1,15 @@
 import React from 'react';
-import { createDrawerNavigator } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 
 import Home from '../pages/Home';
 
-const AppDrawer = createDrawerNavigator();
+const AppStack = createStackNavigator();
 
-function AppRoutes() {
+export default function AppRoutes() {
     return (
-        <AppDrawer.Navigator>
-            <AppDrawer.Screen name="Home" component={Home} />
-        </AppDrawer.Navigator>
-    )
+        <AppStack.Navigator>
+            <AppStack.Screen name="Home" component={Home} />
+        </AppStack.Navigator>
+    );
 }
+
