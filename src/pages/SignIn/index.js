@@ -39,7 +39,7 @@ export default function SignIn() {
                         onChangeText={text => setPassword(text)}
                     />
                 </AreaInput>
-                <SubmitBtn onPress={handleLogin()}>
+                <SubmitBtn onPress={() => handleLogin()}>
                     <SubmitText>Entrar</SubmitText>
                 </SubmitBtn>
                 <Link onPress={() => navigation.navigate('SignUp')}>

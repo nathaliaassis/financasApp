@@ -6,7 +6,7 @@ import { StatusBar } from 'react-native';
 import Routes from './routes/index';
 import AuthProvider from './contexts/auth';
 
-// console.disableYellowBox = true;
+//console.disableYellowBox = true;
 
 export default function App() {
   return (
