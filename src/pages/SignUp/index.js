@@ -43,6 +43,7 @@ export default function SignUp() {
                         autoCorrect={false}
                         autoCapitalize='none'
                         value={password}
+                        secureTextEntry={true}
                         onChangeText={text => setPassword(text)}
                     />
                 </AreaInput>

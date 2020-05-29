@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { Platform } from 'react-native'
 import { useNavigation } from '@react-navigation/native';
 import { Background, Container, Logo, AreaInput, Input, SubmitBtn, SubmitText, Link, LinkText } from './styles';
@@ -11,6 +11,11 @@ export default function SignIn() {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('');
 
+    const { signIn } = useContext(AuthContext);
+
+    function handleLogin() {
+        signIn(email, password);
+    }
     return (
         <Background>
             <Container behavior={Platform.os === 'ios' ? 'padding' : ''}>
@@ -34,7 +39,7 @@ export default function SignIn() {
                         onChangeText={text => setPassword(text)}
                     />
                 </AreaInput>
-                <SubmitBtn>
+                <SubmitBtn onPress={handleLogin()}>
                     <SubmitText>Entrar</SubmitText>
                 </SubmitBtn>
                 <Link onPress={() => navigation.navigate('SignUp')}>
