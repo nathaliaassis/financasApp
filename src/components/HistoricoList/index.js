@@ -1,7 +1,6 @@
-import React from 'react'
-import { View, Text } from 'react-native'
-import { Container, Tipo, TipoText } from './styles'
-import { Icon } from 'react-native-vector-icons/Icon'
+import React from 'react';
+import { Container, Tipo, IconView, TipoText, ValorText } from './styles';
+import Icon from 'react-native-vector-icons/AntDesign'
 
 export default function HistoricoList({ data }) {
     return (
@@ -9,7 +8,7 @@ export default function HistoricoList({ data }) {
             <Tipo>
                 <IconView tipo={data.tipo}>
                     <Icon
-                        name={data.tipo === 'despesa' ? 'arrow-down' : 'arrow-up'}
+                        name={data.tipo === 'despesa' ? 'arrowdown' : 'arrowup'}
                         color='#fff'
                         size='20'
                     />

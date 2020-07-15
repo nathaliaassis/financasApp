@@ -2,7 +2,7 @@ import React from 'react'
 import RNPickerSelect from 'react-native-picker-select';
 import { PickerView } from './styles'
 
-export default function Picker() {
+export default function Picker({ onChange }) {
     return (
         <PickerView>
             <RNPickerSelect
@@ -20,7 +20,7 @@ export default function Picker() {
                     value: null,
 
                 }}
-                onValueChange={}
+                onValueChange={(tipo) => onChange(tipo)}
                 items={[
                     {
                         label: 'Receita',
