@@ -3,13 +3,13 @@ import styled from 'styled-components/native';
 export const Background = styled.View`
     flex: 1;
     background-color: #131313;
-    padding: 24px;
-    align-items: center;
+    padding: 8px;
 `;
 export const Nome = styled.Text`
     font-size: 18px;
     font-style: italic;
     color: white; 
+    text-align: center;
 `;
 export const Saldo = styled.Text`
     font-size: 28px;
@@ -22,9 +22,7 @@ export const Titulo = styled.Text`
     margin: 8px 0;
     align-self: flex-start;
 `;
-export const List = styled.FlatList.attrs({
-    marginHorizontal: 15,
-})`
+export const List = styled.FlatList`
     width: 100%;
     background-color: white;
     padding: 16px 8px;

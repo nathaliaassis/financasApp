@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import {format} from 'date-fns';
 import {useNavigation} from '@react-navigation/native';
+import firebase from '../../services/firebaseConnection';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { TouchableWithoutFeedback, Keyboard, Alert } from 'react-native';
 import { Background, Input, SubmitBtn, SubmitTxt } from './styles';
@@ -72,6 +73,7 @@ export default function New() {
                         returnKeyType="next"
                         onSubmitEditing={() => Keyboard.dismiss()}
                         onChangeText={text => setValor(text)}
+                        value={valor}
                     />
                     <Picker 
                         onChange={setTipo} 

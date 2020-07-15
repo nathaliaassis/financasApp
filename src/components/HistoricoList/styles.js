@@ -4,6 +4,8 @@ export const Container = styled.View`
     padding: 8px;
     margin-bottom: 8px;
     box-shadow: 1px 2px rgba(0,0,0, 0.4);
+    background-color: #f9f9f9;
+    border-radius: 5px;
 `;
 export const Tipo = styled.View`
     flex-direction: row;
@@ -19,6 +21,7 @@ export const TipoText = styled.Text`
     font-weight: 300;
     color: white;
     font-style: italic;
+    margin-left: 4px;
 `;
 export const ValorText = styled.Text`
     font-size: 20px;
