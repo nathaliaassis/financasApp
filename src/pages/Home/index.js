@@ -1,11 +1,13 @@
 import React, { useContext, useState, useEffect } from 'react';
 import firebase from '../../services/firebaseConnection';
-import {Alert} from 'react-native';
-import {format, isPast} from 'date-fns';
+import {Alert, TouchableOpacity} from 'react-native';
+import {format, isBefore} from 'date-fns';
 import { AuthContext } from '../../contexts/auth';
-import { Background, Nome, Saldo, Titulo, List } from './styles';
+import { Background, Nome, Saldo, Titulo, List, Area } from './styles';
 import Header from '../../components/Header';
 import HistoricoList from '../../components/HistoricoList';
+
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 export default function Home() {
@@ -21,6 +23,8 @@ export default function Home() {
 
     const uid = user && user.uid;
 
+    const [newDate, setNewDate] = useState(new Date());
+
     useEffect(()=>{
       async function loadList(){
         await firebase.database().ref('users').child(uid).on('value', (snapshot)=>{
@@ -29,7 +33,7 @@ export default function Home() {
   
         await firebase.database().ref('historico')
         .child(uid)
-        .orderByChild('date').equalTo(format(new Date, 'dd/MM/yy'))
+        .orderByChild('date').equalTo(format(newDate, 'dd/MM/yyyy'))
         .limitToLast(10).on('value', (snapshot)=>{
           setHistorico([]);
   
@@ -51,8 +55,16 @@ export default function Home() {
       }, []);
 
       function handleDelete(data){ 
+        const [diaItem, mesItem, anoItem] = data.date.split('/');
+        const dateItem = new Date(`${anoItem}/${mesItem}/${diaItem}`);
+        console.log(dateItem);
+        
+        const formatToday = format(new Date(), 'dd/MM/yyyy');
+        const [dayToday, monthToday, yearToday] = formatToday.split('/');
+        const today = new Date(`${yearToday}/${monthToday}/${dayToday}`)
+        console.log(today);
 
-        if(isPast(new Date(data.date))){
+        if(isBefore(dateItem, today)){
           alert('Você não pode excluir um registro antigo!');
           return;
         }
@@ -89,7 +101,13 @@ export default function Home() {
 
             <Nome>Olá, {user && user.nome}!</Nome>
             <Saldo>R$ {saldo.toFixed(2).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.')}</Saldo>
-            <Titulo>Últimas movimentações</Titulo>
+
+            <Area>
+              <Titulo>Últimas movimentações</Titulo>
+              <TouchableOpacity onPress={()=>{}}>
+                <Icon name='event' color='#fff' size={30}/>
+              </TouchableOpacity>
+            </Area>
             
             <List
                 showsVerticalScrollIndicator={false}

@@ -30,3 +30,9 @@ export const List = styled.FlatList`
     border-top-right-radius: 10px;
 
 `;
+export const Area = styled.View`
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 10px 0;
+`;
