@@ -1,11 +1,12 @@
 import React, { useContext, useState, useEffect } from 'react';
 import firebase from '../../services/firebaseConnection';
-import {Alert, TouchableOpacity} from 'react-native';
+import {Alert, TouchableOpacity, Platform} from 'react-native';
 import {format, isBefore} from 'date-fns';
 import { AuthContext } from '../../contexts/auth';
 import { Background, Nome, Saldo, Titulo, List, Area } from './styles';
 import Header from '../../components/Header';
 import HistoricoList from '../../components/HistoricoList';
+import DatePicker from '../../components/DatePicker';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
 
@@ -24,6 +25,7 @@ export default function Home() {
     const uid = user && user.uid;
 
     const [newDate, setNewDate] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(false);
 
     useEffect(()=>{
       async function loadList(){
@@ -52,48 +54,55 @@ export default function Home() {
       }
   
         loadList();
-      }, []);
+      }, [newDate]);
 
-      function handleDelete(data){ 
-        const [diaItem, mesItem, anoItem] = data.date.split('/');
-        const dateItem = new Date(`${anoItem}/${mesItem}/${diaItem}`);
-        console.log(dateItem);
-        
-        const formatToday = format(new Date(), 'dd/MM/yyyy');
-        const [dayToday, monthToday, yearToday] = formatToday.split('/');
-        const today = new Date(`${yearToday}/${monthToday}/${dayToday}`)
-        console.log(today);
+    function handleDelete(data){ 
+      const [diaItem, mesItem, anoItem] = data.date.split('/');
+      const dateItem = new Date(`${anoItem}/${mesItem}/${diaItem}`);
+      console.log(dateItem);
+      
+      const formatToday = format(new Date(), 'dd/MM/yyyy');
+      const [dayToday, monthToday, yearToday] = formatToday.split('/');
+      const today = new Date(`${yearToday}/${monthToday}/${dayToday}`)
+      console.log(today);
 
-        if(isBefore(dateItem, today)){
-          alert('Você não pode excluir um registro antigo!');
-          return;
-        }
-        Alert.alert(
-          'Cuidado atenção!',
-           `Você deseja excluir ${data.tipo} - ${data.valor} ?`,
-           [
-              {text: 'Cancelar', style: 'cancel'},
-              {
-                text: 'Sim',
-                onPress: () => handleDeleteSuccess(data)
-              }
-           ]
-        )
-        async function handleDeleteSuccess(){
-          await firebase.database().ref('historico').child(uid).child(data.key).remove()
-          .then( async()=>{
-            let saldoAtual = saldo;
+      if(isBefore(dateItem, today)){
+        alert('Você não pode excluir um registro antigo!');
+        return;
+      }
+      Alert.alert(
+        'Cuidado atenção!',
+          `Você deseja excluir ${data.tipo} - ${data.valor} ?`,
+          [
+            {text: 'Cancelar', style: 'cancel'},
+            {
+              text: 'Sim',
+              onPress: () => handleDeleteSuccess(data)
+            }
+          ]
+      )
+      async function handleDeleteSuccess(){
+        await firebase.database().ref('historico').child(uid).child(data.key).remove()
+        .then( async()=>{
+          let saldoAtual = saldo;
 
-            data.tipo === 'despesa' ? saldoAtual += parseFloat(data.valor) : 
-            saldoAtual -= parseFloat(data.valor);
+          data.tipo === 'despesa' ? saldoAtual += parseFloat(data.valor) : 
+          saldoAtual -= parseFloat(data.valor);
 
-            await firebase.database().ref('users').child(uid).child('saldo').set(saldoAtual);
-          }).catch(error => {
-            console.log(error)
-          })
-        }
-      }  
+          await firebase.database().ref('users').child(uid).child('saldo').set(saldoAtual);
+        }).catch(error => {
+          console.log(error)
+        })
+      }
+    }  
 
+    function handleShowPicker(){
+      setShowDatePicker(true);
+    }
+    function onChangePicker(date){
+      setShowDatePicker(Platform.OS === 'ios');
+      setNewDate(date);
+    }
 
     return (
         <Background>
@@ -104,7 +113,7 @@ export default function Home() {
 
             <Area>
               <Titulo>Últimas movimentações</Titulo>
-              <TouchableOpacity onPress={()=>{}}>
+              <TouchableOpacity onPress={handleShowPicker}>
                 <Icon name='event' color='#fff' size={30}/>
               </TouchableOpacity>
             </Area>
@@ -115,6 +124,14 @@ export default function Home() {
                 keyExtractor={item => item.key}
                 renderItem={({ item }) => (<HistoricoList data={item} deleteItem={handleDelete}/>)}
             />
+
+            {showDatePicker && 
+              <DatePicker 
+                onClose={()=> setShowDatePicker(false)}
+                date={newDate}
+                onChange={onChangePicker}
+              />
+            }
         </Background >
     )
 }
