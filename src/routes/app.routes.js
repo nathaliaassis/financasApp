@@ -5,6 +5,8 @@ import Home from '../pages/Home';
 import New from '../pages/New';
 import Profile from '../pages/Profile';
 
+import CustomDrawer from '../components/CustomDrawer';
+
 const AppDrawer = createDrawerNavigator();
 
 export default function AppRoutes() {
@@ -13,6 +15,7 @@ export default function AppRoutes() {
             drawerStyle={{
                 backgroundColor: '#171717'
             }}
+            drawerContent={(props) => <CustomDrawer {...props}/>}
             drawerContentOptions={{
                 labelStyle: {
                     fontWeight: 'bold'
